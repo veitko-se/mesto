@@ -1,8 +1,17 @@
 @import url(../vendor/normalize.css);
 @import url(../vendor/fonts/inter.css);
 
+/*
+*, img {
+box-sizing: border-box;
+border: red solid 1px;
+}
+*/
+
+
 .page {
   margin: 0 auto;
+  padding: 0 200px;
   font-family: 'Inter', 'Arial', sans-serif;
   background-color: #000000;
   color: #FFFFFF;
@@ -16,3 +25,15 @@
   text-rendering: optimizeLegibility;
 }
 
+.header__logo {
+  max-width: 142px;
+  max-height: 33px;
+}
+
+.header {
+  padding: 45px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-bottom: #545454 solid 1px;
+}
