@@ -1,17 +1,12 @@
 @import url(../vendor/normalize.css);
 @import url(../vendor/fonts/inter.css);
 
-/*
-*, img {
-box-sizing: border-box;
-border: red solid 1px;
-}
 
-*/
+
 
 .page {
   margin: 0 auto;
-  padding: 0 200px;
+  padding: 0;
   font-family: 'Inter', 'Arial', sans-serif;
   background-color: #000000;
   color: #FFFFFF;
@@ -23,6 +18,8 @@ border: red solid 1px;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+  max-width: 880px;
 }
 
 .header__logo {
@@ -34,8 +31,7 @@ border: red solid 1px;
   padding: 45px 0 41px;
   display: flex;
   justify-content: space-between;
-  box-sizing: border-box;
-  border-bottom: #545454 solid 1px;
+  border-bottom: 1px solid rgba(84, 84, 84, .7);  /*#545454 с opacity: 0.7 в формате rgba*/
 }
 
 .content {
@@ -64,13 +60,13 @@ border: red solid 1px;
 
 .profile__info {
   display: grid;
-  grid-template-columns: minmax(50px, max-content) 24px;
+  grid-template-columns: minmax(150px, max-content) 24px;
   grid-template-rows: repeat(2, minmax(min-content, max-content));
   grid-template-areas:
   "title edit-btn"
   "subtitle subtitle";
-  gap: 16px 18px;
-  align-items: center;
+  gap: 10px 18px;/*--------------------gap: 16px 18px;*/
+  align-items: baseline;
 }
 
 
@@ -123,3 +119,163 @@ border: red solid 1px;
   flex-shrink: 0;
 }
 
+.elements {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 282px);   /*minmax(282px, 1fr)*/
+  gap: 20px 17px;
+  grid-auto-rows: 361px;
+  justify-content: center;
+}
+
+.element {
+  background: #FFFFFF;
+  border-radius: 10px;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.element__image {
+  margin: 0;
+  padding: 0;
+  border-radius: 10px 10px 0 0;
+  aspect-ratio: 1/1;
+}
+
+.element__caption {
+  margin: 0;
+  padding: 0;
+  margin: auto 21px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+}
+
+.element__caption-text {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 198px;
+}
+
+
+.like-btn {
+  background-color: transparent;
+  width: 22px;
+  height: 19px;
+  border: none;
+  background-image: url('../images/like-btn.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.footer {
+  padding: 66px 0 60px;
+}
+
+.footer__copyright {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  line-height: 22px;
+  color: #545454;
+}
+
+
+
+@media screen and (max-width: 1023.98px) {
+  .page {
+    max-width: 581px;
+  }
+
+  .profile__info-title {
+    font-size: 29px;
+    line-height: 1.2;
+  }
+
+  .profile__info-subtitle {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width: 635.98px) {
+  .page {
+    max-width: 320px;
+    padding: 0 19px;
+  }
+
+  .header__logo {
+    max-width: 103.74px;
+    max-height: 24.4px;
+    padding-left: 27px;
+  }
+
+  .header {
+    padding: 28px 0 31.6px;
+    margin: 0 -19px; /*соответствует padding у .page*/
+  }
+
+  .profile {
+    padding: 42px 0 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .profile__info {
+    gap: 8px 10px;/*----------gap: 14px 10px;*/
+    padding-bottom: 10px;
+  }
+
+  .profile__info-title {
+    font-size: 27px;
+    line-height: 33px;
+    text-align: center;
+    padding-left: 28px; /*размер кнопки 18px + отступ до кнопки 10px*/
+  }
+
+  .profile__info-subtitle {
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+  }
+
+  .edit-btn {
+    width: 18px;
+    height: 18px;
+    background-size: 50% 50%;
+  }
+
+  .add-btn {
+    width: 100%;
+    background-size: 40% 40%;
+  }
+
+
+
+
+  .footer {
+    padding: 48px 0 36px;
+  }
+
+  .footer__copyright {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+
+}
