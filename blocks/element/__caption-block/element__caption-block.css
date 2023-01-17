@@ -1,0 +1,9 @@
+.element__caption-block {
+  margin: 0;
+  padding: 0;
+  margin: auto 21px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+}
