@@ -8,6 +8,12 @@
   background-repeat: no-repeat;
   background-position: center;
   flex-shrink: 0;
+  transition: opacity .4s ease-out;
+}
+
+.profile__add-btn:hover {
+  color: #FFFFFF;
+  opacity: .6;
 }
 
 @media screen and (max-width: 635.98px) {

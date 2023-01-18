@@ -7,4 +7,10 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  transition: opacity .4s ease-out;
+}
+
+.element__like-btn:hover {
+  color: #FFFFFF;
+  opacity: .5;
 }
