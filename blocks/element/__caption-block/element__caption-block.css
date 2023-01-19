@@ -3,6 +3,6 @@
   margin: auto 21px;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 20px;
 }

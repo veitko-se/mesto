@@ -24,3 +24,11 @@
     background-size: 50% 50%;
   }
 }
+
+/*свойство align-items: baseline поддерживается,
+но отрабатывает в мозилле не так, как ожидается*/
+@-moz-document url-prefix() {
+  .profile__edit-btn {
+    align-self: center;
+  }
+}
