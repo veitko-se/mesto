@@ -22,6 +22,6 @@
     font-size: 27px;
     line-height: 33px;
     text-align: center;
-    padding-left: 28px; /*размер кнопки 18px + отступ до кнопки 10px*/
+    padding-left: 33px; /*размер кнопки 18px + отступ до кнопки 10px + 5px по макету??*/
   }
 }

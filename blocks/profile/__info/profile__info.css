@@ -11,7 +11,8 @@
 
 @media screen and (max-width: 635.98px) {
   .profile__info {
-    gap: 8px 10px;
-    padding-bottom: 10px;
+    gap: 7px 10px;
+    padding-bottom: 8px;
+    align-items: center;
   }
 }
