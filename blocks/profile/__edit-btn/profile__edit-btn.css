@@ -1,7 +1,7 @@
 .profile__edit-btn {
   background-color: transparent;
   width: 24px;
-  height: 24px;
+  aspect-ratio: 1/1;
   box-sizing: border-box;
   border: #FFFFFF solid 1px;
   background-image: url('../../../images/edit-btn.svg');
@@ -20,7 +20,6 @@
 @media screen and (max-width: 635.98px) {
   .profile__edit-btn {
     width: 18px;
-    height: 18px;
     background-size: 50% 50%;
   }
 }
