@@ -20,7 +20,7 @@
 
 @import url(../blocks/element/element.css);
 @import url(../blocks/element/__image/element__image.css);
-@import url(../blocks/element/__caption-block/element__caption-block.css);
+@import url(../blocks/element/__footer/element__footer.css);
 @import url(../blocks/element/__text/element__text.css);
 @import url(../blocks/element/__like-btn/element__like-btn.css);
 @import url(../blocks/element/__like-btn/_active/element__like-btn_active.css);
