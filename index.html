@@ -28,55 +28,16 @@
     </section>
 
     <section class="elements" aria-label="Места">
-
-      <article class="element">
-        <img src="./images/element-kcr.jpg" alt="Карачаевск" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Карачаевск</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
-      <article class="element">
-        <img src="./images/element-elbrus.jpg" alt="Гора Эльбрус" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Гора Эльбрус</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
-      <article class="element">
-        <img src="./images/element-dombai.jpg" alt="Домбай" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Домбай</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
-      <article class="element">
-        <img src="./images/element-elbrus.jpg" alt="Гора Эльбрус" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Гора Эльбрус</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
-      <article class="element">
-        <img src="./images/element-dombai.jpg" alt="Домбай" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Домбай</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
-      <article class="element">
-        <img src="./images/element-kcr.jpg" alt="Карачаево-Черкессия" class="element__image">
-        <div class="element__footer">
-          <h3 class="element__text">Карачаево-Черкессия</h3>
-          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-        </div>
-      </article>
-
+      <template id="element-template">
+        <article class="element">
+          <img src="" alt="Изображение" class="element__image">
+          <button type="button" class="element__trash-btn" aria-label="Удалить"></button>
+          <div class="element__footer">
+            <h3 class="element__text"></h3>
+            <button type="button" class="element__like-btn" aria-label="Нравится"></button>
+          </div>
+        </article>
+      </template>
     </section>
 
   </main>
@@ -85,14 +46,26 @@
     <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
   </footer>
 
-  <section class="popup">
+  <section class="popup" id="popup-profile">
     <div class="popup__container">
       <button type="button" class="popup__close-btn" aria-label="Закрыть окно"></button>
       <h2 class="popup__title">Редактировать профиль</h2>
-      <form class="popup__form" name="profile">
-        <input aria-label="Имя" type="text" class="popup__input popup__input_type_name" placeholder="Имя" required name="title-profile">
-        <input aria-label="О себе" type="text" class="popup__input popup__input_type_job" placeholder="О себе" required name="subtitle-profile">
+      <form class="popup__form" name="profile" id="form-profile">
+        <input aria-label="Имя" type="text" class="popup__input" id="input-profile-name" placeholder="Имя" required name="title-profile">
+        <input aria-label="О себе" type="text" class="popup__input" id="input-profile-job" placeholder="О себе" required name="subtitle-profile">
         <button type="submit" class="popup__save-btn">Сохранить</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="popup" id="popup-place">
+    <div class="popup__container">
+      <button type="button" class="popup__close-btn" aria-label="Закрыть окно"></button>
+      <h2 class="popup__title">Новое место</h2>
+      <form class="popup__form" name="place" id="form-place">
+        <input aria-label="Название" type="text" class="popup__input" id="input-place-name" placeholder="Название" required name="title-profile">
+        <input aria-label="Ссылка на картинку" type="url" class="popup__input" id="input-place-link" placeholder="Ссылка на картинку" required name="subtitle-profile">
+        <button type="submit" class="popup__save-btn">Создать</button>
       </form>
     </div>
   </section>
