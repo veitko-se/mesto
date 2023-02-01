@@ -10,7 +10,7 @@ const formProfile = document.querySelector('#form-profile');
 const inputNameProfile = formProfile.querySelector('#input-profile-name');
 const inputJobProfile = formProfile.querySelector('#input-profile-job');
 
-const closePopupBtn = document.querySelectorAll('.popup__close-btn');
+const closePopupBtns = document.querySelectorAll('.popup__close-btn');
 
 const popupPlace = document.querySelector('#popup-place');
 const formPlace = document.querySelector('#form-place');
@@ -64,19 +64,27 @@ function editProfile(evt) {
   closePopup(evt);
 }
 
-//функция добавления карточек и кнопок на них
+//функция добавления карточек со всеми их интерактивными элементами
 function addPlace(name, link) {
   const templatePlace = document.querySelector('#element-template').content;
   const cardPlace = templatePlace.querySelector('.element').cloneNode(true);
   const deletePlaceBtn = cardPlace.querySelector('.element__trash-btn');
   const likePlaceBtn = cardPlace.querySelector('.element__like-btn');
+  const imagePlace = cardPlace.querySelector('.element__image');
+  const popupPhoto = document.querySelector('#popup-photo');
 
   cardPlace.querySelector('.element__text').textContent = name;
-  cardPlace.querySelector('.element__image').src = link;
-  cardPlace.querySelector('.element__image').alt = name;
+  imagePlace.src = link;
+  imagePlace.alt = name;
 
   containerPlaces.prepend(cardPlace);
 
+  imagePlace.addEventListener('click', () => {
+    popupPhoto.querySelector('.popup__title_type_photo').textContent = name;
+    popupPhoto.querySelector('.popup__photo').src = link;
+    popupPhoto.querySelector('.popup__photo').alt = name;
+    openPopup(popupPhoto);
+  });
   deletePlaceBtn.addEventListener('click', () => cardPlace.remove());
   likePlaceBtn.addEventListener('click', evt =>
     evt.target.classList.toggle('element__like-btn_active')
@@ -104,7 +112,7 @@ initialPlaces.forEach(function (item) {
 
 
 // слушатель кнопок Close
-closePopupBtn.forEach(function (item) {
+closePopupBtns.forEach(function (item) {
   item.addEventListener('click', evt => closePopup(evt));
 });
 // слушатель кнопки Edit

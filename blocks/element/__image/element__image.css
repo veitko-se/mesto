@@ -7,4 +7,5 @@
   object-fit: cover;
   line-height: 20px; /*чтобы надписи alt были на месте, если картинка не загрузилась*/
   filter: brightness(85%); /*чтобы кнопка не терялась на белой картинке*/
+  cursor: pointer;
 }
