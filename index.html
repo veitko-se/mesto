@@ -27,24 +27,24 @@
       <button type="button" class="profile__add-btn" aria-label="Добавить фото"></button>
     </section>
 
-    <section class="elements" aria-label="Места">
-      <template id="element-template">
-        <article class="element">
-          <img src="./images/header-logo.svg" alt="Изображение" class="element__image">
-          <button type="button" class="element__trash-btn" aria-label="Удалить"></button>
-          <div class="element__footer">
-            <h3 class="element__text"></h3>
-            <button type="button" class="element__like-btn" aria-label="Нравится"></button>
-          </div>
-        </article>
-      </template>
-    </section>
+    <section class="elements" aria-label="Места"></section>
 
   </main>
 
   <footer class="footer">
     <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
   </footer>
+
+  <template id="element-template">
+    <article class="element">
+      <img src="./images/header-logo.svg" alt="Изображение" class="element__image">
+      <button type="button" class="element__trash-btn" aria-label="Удалить"></button>
+      <div class="element__footer">
+        <h3 class="element__text"></h3>
+        <button type="button" class="element__like-btn" aria-label="Нравится"></button>
+      </div>
+    </article>
+  </template>
 
   <section class="popup" id="popup-profile">
     <div class="popup__container">
@@ -78,6 +78,7 @@
     </div>
   </section>
 
+  <script src="./scripts/places.js"></script>
   <script src="./scripts/index.js"></script>
 
 </body>
