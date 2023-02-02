@@ -50,7 +50,7 @@ function handleClickBtnLike(evt) {
 };
 
 /** функция формирования карточек со всеми их интерактивными элементами */
-function addPlace(name, link) {
+function createPlace(name, link) {
   const cardPlace = templatePlace.querySelector('.element').cloneNode(true);
   const buttonDeletePlace = cardPlace.querySelector('.element__trash-btn');
   const buttonLikePlace = cardPlace.querySelector('.element__like-btn');
@@ -75,7 +75,7 @@ function addPlace(name, link) {
 
 /** функция генерации карточки в нужном месте страницы */
 function renderPlace(name, link) {
-  containerPlaces.prepend(addPlace(name, link));
+  containerPlaces.prepend(createPlace(name, link));
 };
 
 /** обработчик события - создание карточки из заполненных input */
@@ -115,7 +115,7 @@ buttonEditProfile.addEventListener('click', () => {
 buttonAddPlace.addEventListener('click', () => openPopup(popupPlace));
 
 /** слушатель submit в форме Profile */
-formProfile.addEventListener('submit', evt => handleSubmitFormProfile(evt, popupProfile));
+formProfile.addEventListener('submit', handleSubmitFormProfile);
 
 /** слушатель submit в форме Place */
-formPlace.addEventListener('submit', evt => handleSubmitFormPlace(evt));
+formPlace.addEventListener('submit', handleSubmitFormPlace);
