@@ -12,18 +12,18 @@ const templatePlace = document.querySelector('#element-template').content;
 const buttonsClosePopup = document.querySelectorAll('.popup__close-btn');
 
 const popupProfile = document.querySelector('#popup-profile');
-const formProfile = document.querySelector('#form-profile');
-const inputNameProfile = formProfile.querySelector('#input-profile-name');
-const inputJobProfile = formProfile.querySelector('#input-profile-job');
+const formProfile = document.forms.profile;
+const inputNameProfile = formProfile.elements.titleProfile;
+const inputJobProfile = formProfile.elements.subtitleProfile;
 
 const popupView = document.querySelector('#popup-photo');
 const titleView = popupView.querySelector('.popup__title_type_photo');
 const imageView = popupView.querySelector('.popup__photo');
 
 const popupPlace = document.querySelector('#popup-place');
-const formPlace = document.querySelector('#form-place');
-const namePlace = formPlace.querySelector('#input-place-name');
-const linkPlace = formPlace.querySelector('#input-place-link');
+const formPlace = document.forms.place;
+const inputNamePlace = formPlace.elements.namePlace;
+const inputLinkPlace = formPlace.elements.linkPlace;
 
 
 /** функция открытия Popup */
@@ -81,23 +81,34 @@ function renderPlace(name, link) {
 /** обработчик события - создание карточки из заполненных input */
 function handleSubmitFormPlace(evt) {
   evt.preventDefault();
-
-  renderPlace(namePlace.value, linkPlace.value);
+  renderPlace(inputNamePlace.value, inputLinkPlace.value);
   closePopup(popupPlace);
+};
 
-  namePlace.value = '';
-  linkPlace.value = '';
+/** обработчик события - открыть popup для редактирования профиля */
+function handleButtonEditProfile() {
+  inputNameProfile.value = titleProfile.textContent;
+  inputJobProfile.value = subtitleProfile.textContent;
+  resetValidation(formProfile, formValidationConfig);
+  openPopup(popupProfile);
+};
+
+/** обработчик события - открыть popup для добавления нового места */
+function handleButtonAddPlace() {
+  formPlace.reset();
+  resetValidation(formPlace, formValidationConfig);
+  openPopup(popupPlace);
 };
 
 
 /** заполнение 6 карточек из коробки */
-initialPlaces.forEach(function (item) {
-  renderPlace(item.name, item.link);
-});
+initialPlaces.forEach(item =>
+  renderPlace(item.name, item.link)
+);
 
 
 /** слушатель кнопок Close */
-buttonsClosePopup.forEach(function (item) {
+buttonsClosePopup.forEach(item => {
   item.addEventListener('click', evt => {
     const popup = evt.target.closest('.popup');
     closePopup(popup);
@@ -105,14 +116,10 @@ buttonsClosePopup.forEach(function (item) {
 });
 
 /** слушатель кнопки Edit */
-buttonEditProfile.addEventListener('click', () => {
-  inputNameProfile.value = titleProfile.textContent;
-  inputJobProfile.value = subtitleProfile.textContent;
-  openPopup(popupProfile);
-});
+buttonEditProfile.addEventListener('click', handleButtonEditProfile);
 
 /** слушатель кнопки Add **/
-buttonAddPlace.addEventListener('click', () => openPopup(popupPlace));
+buttonAddPlace.addEventListener('click', handleButtonAddPlace);
 
 /** слушатель submit в форме Profile */
 formProfile.addEventListener('submit', handleSubmitFormProfile);
