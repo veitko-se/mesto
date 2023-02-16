@@ -9,6 +9,7 @@ const containerPlaces = document.querySelector('.elements');
 const templatePlace = document.querySelector('#element-template').content;
 
 /** popup-ы */
+const popups = document.querySelectorAll('.popup');
 const buttonsClosePopup = document.querySelectorAll('.popup__close-btn');
 
 const popupProfile = document.querySelector('#popup-profile');
@@ -100,6 +101,21 @@ function handleButtonAddPlace() {
   openPopup(popupPlace);
 };
 
+/** обработчик события - закрыть popup при клике на оверлей */
+function handleClickPopupOverlay(evt, popup) {
+  const overlay = evt.target.closest('.popup');
+  if (evt.target === overlay) {
+    closePopup(popup);
+  };
+};
+
+/** обработчик события - закрыть popup при нажатии Esc */
+function handleKeydownEsc(evt, popup) {
+  if( evt.key === 'Escape') {
+    closePopup(popup);
+  }
+};
+
 
 /** заполнение 6 карточек из коробки */
 initialPlaces.forEach(item =>
@@ -126,3 +142,9 @@ formProfile.addEventListener('submit', handleSubmitFormProfile);
 
 /** слушатель submit в форме Place */
 formPlace.addEventListener('submit', handleSubmitFormPlace);
+
+/** слушатели клика по оверлею и нажатия на Esc для каждого из popup-ов */
+popups.forEach(popup => {
+  popup.addEventListener('click', evt => handleClickPopupOverlay(evt, popup));
+  document.addEventListener('keydown', evt => handleKeydownEsc(evt, popup));
+});
