@@ -15,6 +15,11 @@
   box-sizing: border-box;
 }
 
+.popup__container:hover  {
+  cursor: auto;
+}
+
+
 @media screen and (max-width: 635.98px) {
   .popup__container {
     padding: 24.5px 22px;

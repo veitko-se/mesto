@@ -11,3 +11,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   flex-direction: column;
 }
+
+.popup:hover  {
+  cursor: pointer;
+}

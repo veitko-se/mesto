@@ -27,14 +27,33 @@ const inputNamePlace = formPlace.elements.namePlace;
 const inputLinkPlace = formPlace.elements.linkPlace;
 
 
+/** обработчик события - закрыть popup при нажатии Esc */
+function handleKeydownEsc(evt) {
+ const popup = document.querySelector('.popup_opened');
+  if(evt.key === 'Escape') {
+    closePopup(popup);
+  }
+};
+
+/** обработчик события - закрыть popup при клике на оверлей */
+function handleClickPopupOverlay(evt, popup) {
+  const overlay = evt.target.closest('.popup');
+  if (evt.target === overlay) {
+    closePopup(popup);
+  };
+};
+
 /** функция открытия Popup */
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleKeydownEsc);
+  popup.addEventListener('click', evt => handleClickPopupOverlay(evt, popup));
 }
 
 /** функция закрытия Popup */
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleKeydownEsc);
 }
 
 /** обработчик события - обновление информации профиля из заполненных input */
@@ -69,7 +88,7 @@ function createPlace(name, link) {
     openPopup(popupView);
   });
   buttonDeletePlace.addEventListener('click', () => cardPlace.remove());
-  buttonLikePlace.addEventListener('click', evt => handleClickBtnLike(evt));
+  buttonLikePlace.addEventListener('click', handleClickBtnLike);
 
   return cardPlace;
 };
@@ -101,21 +120,6 @@ function handleButtonAddPlace() {
   openPopup(popupPlace);
 };
 
-/** обработчик события - закрыть popup при клике на оверлей */
-function handleClickPopupOverlay(evt, popup) {
-  const overlay = evt.target.closest('.popup');
-  if (evt.target === overlay) {
-    closePopup(popup);
-  };
-};
-
-/** обработчик события - закрыть popup при нажатии Esc */
-function handleKeydownEsc(evt, popup) {
-  if( evt.key === 'Escape') {
-    closePopup(popup);
-  }
-};
-
 
 /** заполнение 6 карточек из коробки */
 initialPlaces.forEach(item =>
@@ -142,9 +146,3 @@ formProfile.addEventListener('submit', handleSubmitFormProfile);
 
 /** слушатель submit в форме Place */
 formPlace.addEventListener('submit', handleSubmitFormPlace);
-
-/** слушатели клика по оверлею и нажатия на Esc для каждого из popup-ов */
-popups.forEach(popup => {
-  popup.addEventListener('click', evt => handleClickPopupOverlay(evt, popup));
-  document.addEventListener('keydown', evt => handleKeydownEsc(evt, popup));
-});
