@@ -10,7 +10,6 @@ const templatePlace = document.querySelector('#element-template').content;
 
 /** popup-ы */
 const popups = document.querySelectorAll('.popup');
-const buttonsClosePopup = document.querySelectorAll('.popup__close-btn');
 
 const popupProfile = document.querySelector('#popup-profile');
 const formProfile = document.forms.profile;
@@ -28,17 +27,18 @@ const inputLinkPlace = formPlace.elements.linkPlace;
 
 
 /** обработчик события - закрыть popup при нажатии Esc */
-function handleKeydownEsc(evt) {
- const popup = document.querySelector('.popup_opened');
+function handleKeydownEscForClose(evt) {
   if(evt.key === 'Escape') {
+    const popup = document.querySelector('.popup_opened');
     closePopup(popup);
   }
 };
 
-/** обработчик события - закрыть popup при клике на оверлей */
-function handleClickPopupOverlay(evt, popup) {
+/** обработчик события - закрыть popup при клике на оверлей или крестик*/
+function handleMousedownForClose(evt, popup) {
   const overlay = evt.target.closest('.popup');
-  if (evt.target === overlay) {
+  const buttonClosePopup = evt.target.closest('.popup__close-btn');
+  if ((evt.target === overlay)||(evt.target === buttonClosePopup)) {
     closePopup(popup);
   };
 };
@@ -46,14 +46,13 @@ function handleClickPopupOverlay(evt, popup) {
 /** функция открытия Popup */
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', handleKeydownEsc);
-  popup.addEventListener('mousedown', evt => handleClickPopupOverlay(evt, popup));
+  document.addEventListener('keydown', handleKeydownEscForClose);
 }
 
 /** функция закрытия Popup */
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', handleKeydownEsc);
+  document.removeEventListener('keydown', handleKeydownEscForClose);
 }
 
 /** обработчик события - обновление информации профиля из заполненных input */
@@ -127,12 +126,9 @@ initialPlaces.forEach(item =>
 );
 
 
-/** слушатель кнопок Close */
-buttonsClosePopup.forEach(item => {
-  item.addEventListener('click', evt => {
-    const popup = evt.target.closest('.popup');
-    closePopup(popup);
-  });
+/** слушатель popup-ов для событий закрытия по крестику и оверлею */
+popups.forEach(popup => {
+  popup.addEventListener('mousedown', evt => handleMousedownForClose(evt, popup));
 });
 
 /** слушатель кнопки Edit */
