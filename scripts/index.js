@@ -47,7 +47,7 @@ function handleClickPopupOverlay(evt, popup) {
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', handleKeydownEsc);
-  popup.addEventListener('click', evt => handleClickPopupOverlay(evt, popup));
+  popup.addEventListener('mousedown', evt => handleClickPopupOverlay(evt, popup));
 }
 
 /** функция закрытия Popup */
