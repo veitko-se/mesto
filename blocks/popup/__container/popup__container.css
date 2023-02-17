@@ -4,7 +4,7 @@
   padding: 34px 36px 37px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   background-color: white;
   color: black;
   width: 430px;
@@ -22,7 +22,7 @@
 
 @media screen and (max-width: 635.98px) {
   .popup__container {
-    padding: 24.5px 22px;
+    padding: 24px 22px;
     width: 282px;
     aspect-ratio: 141/161;
   }
