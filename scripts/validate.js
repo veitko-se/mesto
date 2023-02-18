@@ -50,7 +50,7 @@ const toggleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-/** слушатель input-ов - обеспечивает отзывчивость интерфейса */
+/** слушатель input-ов - обеспечивает отзывчивость интерфейса, запрещает отправлять невалидную форму по Enter */
 const setEventListeners = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
@@ -60,6 +60,11 @@ const setEventListeners = (formElement, config) => {
       checkInputValidity(formElement, inputElement, config);
       toggleButtonState(inputList, buttonElement, config);
     });
+    inputElement.addEventListener('keypress', evt => {
+      if ((evt.key === 'Enter')&&(hasInvalidInput(inputList))) {
+        evt.preventDefault();
+      };
+    })
   });
 };
 
@@ -69,7 +74,7 @@ const enableValidation = config => {
   formList.forEach((formElement) => setEventListeners(formElement, config));
 };
 
-/** функция сброса предыдущей валидации при открытии popup-ов */
+/** функция сброса предыдущей валидации при открытии popup-ов, без сброса полей формы */
 const resetValidation = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);

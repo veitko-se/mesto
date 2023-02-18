@@ -101,7 +101,7 @@ function renderPlace(name, link) {
 function handleSubmitFormPlace(evt) {
   evt.preventDefault();
   renderPlace(inputNamePlace.value, inputLinkPlace.value);
-  closePopup(popupPlace);
+  closePopup(popupPlace); //после Submit не сбрасываем форму, т.к. сбросим ее при открытии
 };
 
 /** обработчик события - открыть popup для редактирования профиля */
@@ -114,7 +114,7 @@ function handleButtonEditProfile() {
 
 /** обработчик события - открыть popup для добавления нового места */
 function handleButtonAddPlace() {
-  formPlace.reset();
+  formPlace.reset();  //сбрасываем форму при каждом открытии, т.к. нет кнопки "очистить"
   resetValidation(formPlace, formValidationConfig);
   openPopup(popupPlace);
 };
