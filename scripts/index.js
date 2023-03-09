@@ -6,7 +6,6 @@ const buttonAddPlace = document.querySelector('.profile__add-btn');
 
 /** раздел Места */
 const containerPlaces = document.querySelector('.elements');
-const templatePlace = document.querySelector('#element-template').content;
 
 /** popup-ы */
 const popups = document.querySelectorAll('.popup');
@@ -22,6 +21,7 @@ const imageView = popupView.querySelector('.popup__photo');
 
 const popupPlace = document.querySelector('#popup-place');
 const formPlace = document.forms.place;
+const inputsPlace = {};
 const inputNamePlace = formPlace.elements.namePlace;
 const inputLinkPlace = formPlace.elements.linkPlace;
 
@@ -63,47 +63,6 @@ function handleSubmitFormProfile(evt) {
   closePopup(popupProfile);
 }
 
-/** обработчик события - лайк */
-function handleClickBtnLike(evt) {
-  evt.target.classList.toggle('element__like-btn_active');
-};
-
-/** функция формирования карточек со всеми их интерактивными элементами */
-function createPlace(name, link) {
-  const cardPlace = templatePlace.querySelector('.element').cloneNode(true);
-  const buttonDeletePlace = cardPlace.querySelector('.element__trash-btn');
-  const buttonLikePlace = cardPlace.querySelector('.element__like-btn');
-  const imagePlace = cardPlace.querySelector('.element__image');
-  const titlePlace = cardPlace.querySelector('.element__text');
-
-  titlePlace.textContent = name;
-  imagePlace.src = link;
-  imagePlace.alt = name;
-
-  imagePlace.addEventListener('click', () => {
-    titleView.textContent = name;
-    imageView.src = link;
-    imageView.alt = name;
-    openPopup(popupView);
-  });
-  buttonDeletePlace.addEventListener('click', () => cardPlace.remove());
-  buttonLikePlace.addEventListener('click', handleClickBtnLike);
-
-  return cardPlace;
-};
-
-/** функция генерации карточки в нужном месте страницы */
-function renderPlace(name, link) {
-  containerPlaces.prepend(createPlace(name, link));
-};
-
-/** обработчик события - создание карточки из заполненных input */
-function handleSubmitFormPlace(evt) {
-  evt.preventDefault();
-  renderPlace(inputNamePlace.value, inputLinkPlace.value);
-  closePopup(popupPlace); //после Submit не сбрасываем форму, т.к. сбросим ее при открытии
-};
-
 /** обработчик события - открыть popup для редактирования профиля */
 function handleButtonEditProfile() {
   inputNameProfile.value = titleProfile.textContent;
@@ -120,10 +79,117 @@ function handleButtonAddPlace() {
 };
 
 
+
+
+
+
+class Card {
+  constructor(data, templateSelector) {
+    this._name = data.name;
+    this._link = data.link;
+    this._templateSelector = templateSelector;
+    this._element = ''
+  }
+
+
+  /** функция получения шаблона */
+  _getTemplate() {
+    const cardPlace = document
+      .querySelector(this._templateSelector)
+      .content
+      .querySelector('.element')
+      .cloneNode(true);
+
+    return cardPlace;
+  }
+
+
+  /** обработчик события - лайк */
+  _handleClickBtnLike(evt) {
+    evt.target.classList.toggle('element__like-btn_active');
+  };
+
+
+  /** обработчик события - клик по картинке */
+  _handleClickImagePlace() {
+    titleView.textContent = this._name;
+    imageView.src = this._link;
+    imageView.alt = this._name;
+    openPopup(popupView);
+  };
+
+
+  /** обработчик события - лайк */
+  _handleClickBtnTrash() {
+    this._element.remove();
+  };
+
+
+  /** слушатели для карточки */
+  _setEventListeners() {
+    const buttonDeletePlace = this._element.querySelector('.element__trash-btn');
+    const buttonLikePlace = this._element.querySelector('.element__like-btn');
+    const imagePlace = this._element.querySelector('.element__image');
+
+    buttonDeletePlace.addEventListener('click', () => this._handleClickBtnTrash());
+    buttonLikePlace.addEventListener('click', this._handleClickBtnLike);
+    imagePlace.addEventListener('click', () => this._handleClickImagePlace());
+  };
+
+
+  /** функция формирования карточек со всеми их интерактивными элементами */
+  createPlace() {
+    this._element = this._getTemplate();
+    const titlePlace = this._element.querySelector('.element__text');
+    const imagePlace = this._element.querySelector('.element__image');
+
+    titlePlace.textContent = this._name;
+    imagePlace.src = this._link;
+    imagePlace.alt = this._name;
+
+    this._setEventListeners();
+
+    return this._element;
+  };
+}
+
+
+
+
+
+
+
+/** функция генерации карточки в нужном месте страницы */
+function renderPlace(data, templateSelector) {
+  const card = new Card(data, templateSelector);
+  const cardPlace = card.createPlace();
+  containerPlaces.prepend(cardPlace);
+};
+
+
 /** заполнение 6 карточек из коробки */
-initialPlaces.forEach(item =>
-  renderPlace(item.name, item.link)
-);
+initialPlaces.forEach((item) => {
+  renderPlace(item, '#element-template');
+});
+
+
+/** обработчик события - создание карточки из заполненных input */
+function handleSubmitFormPlace(evt) {
+  evt.preventDefault();
+
+  inputsPlace.name = inputNamePlace.value;
+  inputsPlace.link = inputLinkPlace.value;
+
+  renderPlace(inputsPlace, '#element-template');
+
+  closePopup(popupPlace); //после Submit не сбрасываем форму, т.к. сбросим ее при открытии
+
+  inputsPlace.name = '';
+  inputsPlace.link = '';
+};
+
+
+
 
 
 /** слушатель popup-ов для событий закрытия по крестику и оверлею */
