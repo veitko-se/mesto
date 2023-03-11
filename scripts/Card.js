@@ -13,10 +13,10 @@ export default class Card {
     this._link = data.link;
     this._templateSelector = templateSelector;
     this._element = null;
-    this._elementImage = this._element.querySelector('.element__image');
-    this._elementTitle = this._element.querySelector('.element__text');
-    this._elementBtnTrash = this._element.querySelector('.element__trash-btn');
-    this._elementBtnLike = this._element.querySelector('.element__like-btn');
+    this._elementImage = null;
+    this._elementTitle = null;
+    this._elementBtnTrash = null;
+    this._elementBtnLike = null;
   }
 
   /** приватный метод получения шаблона */
@@ -57,9 +57,15 @@ export default class Card {
   /** публичный метод формирования карточек со всеми их интерактивными элементами */
   createPlace() {
     this._element = this._getTemplate();
+    this._elementImage = this._element.querySelector('.element__image');
+    this._elementTitle = this._element.querySelector('.element__text');
+    this._elementBtnTrash = this._element.querySelector('.element__trash-btn');
+    this._elementBtnLike = this._element.querySelector('.element__like-btn');
+
     this._elementTitle.textContent = this._name;
     this._elementImage.src = this._link;
     this._elementImage.alt = this._name;
+    
     this._setEventListeners();
     return this._element;
   };
