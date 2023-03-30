@@ -1,4 +1,4 @@
-/** кнопка на странице */
+/** кнопки на странице */
 const buttonEditProfile = document.querySelector('.profile__edit-btn');
 const buttonAddPlace = document.querySelector('.profile__add-btn');
 
