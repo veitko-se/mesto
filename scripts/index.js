@@ -1,100 +1,101 @@
 import { initialPlaces } from './places.js';
 import {
-  titleProfile,
-  subtitleProfile,
   buttonEditProfile,
   buttonAddPlace,
-  containerPlaces,
-  popupList,
-  popupProfile,
   formProfile,
   inputNameProfile,
   inputJobProfile,
-  popupPlace,
   formPlace,
-  inputNamePlace,
-  inputLinkPlace,
-  formValidationConfig
+  formValidationConfig,
+  selectorPopupProfile,
+  selectorUserName,
+  selectorUserJob,
+  selectorPopupView,
+  selectorCardTemplate,
+  selectorPopupPlace,
+  selectorCardSection
 } from './constants.js';
-import { openPopup, closePopup } from './util.js';
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
+import Section from './Section.js';
+import PopupWithForm from './PopupWithForm.js';
+import PopupWithImage from './PopupWithImage.js';
+import UserInfo from './UserInfo.js';
 
 
-/** включение валидации на странице для каждой из форм*/
+/** Объявление переменных */
+/** 1. Валидация */
+/** экземляр класса: валидация для формы с информацией о пользователе*/
 const profileFormValidator = new FormValidator(formValidationConfig, formProfile);
+/** экземляр класса: валидация для формы добавления нового места*/
 const placeFormValidator = new FormValidator(formValidationConfig, formPlace);
+
+/** 2. Пользователь */
+/** экземляр класса: информация о пользователе*/
+const userInfo = new UserInfo({
+  selectorUserName: selectorUserName,
+  selectorUserJob: selectorUserJob
+});
+/** экземляр класса: попап с информацией о пользователе*/
+const popupProfile = new PopupWithForm({
+  selector: selectorPopupProfile,
+  handleFormSubmit: (formData) => {
+    userInfo.setUserInfo(formData);
+  }
+});
+
+/** 3. Карточки мест */
+/** экземляр класса: попапа для открытия карточки места*/
+const popupView = new PopupWithImage(selectorPopupView);
+/** экземляр класса: секция с карточками мест*/
+const cardList = new Section({
+  renderer: (item) => {
+    const card = new Card(item, selectorCardTemplate, popupView.open.bind(popupView));
+    const cardElement = card.createPlace();
+    cardList.addItem(cardElement);
+  }
+}, selectorCardSection);
+/** экземляр класса: попап для добавления нового места*/
+const popupPlace = new PopupWithForm({
+  selector: selectorPopupPlace,
+  handleFormSubmit: (formData) => {
+    cardList.renderItems([{name: formData.namePlace, link: formData.linkPlace}]);
+  }
+});
+
+
+/** Логика страницы */
+/** включение валидации на странице для каждой из форм*/
 profileFormValidator.enableValidation();
 placeFormValidator.enableValidation();
 
-/** обработчик события - открыть popup для редактирования профиля */
-function handleButtonEditProfile() {
-  inputNameProfile.value = titleProfile.textContent;
-  inputJobProfile.value = subtitleProfile.textContent;
-  profileFormValidator.resetValidation();
-  openPopup(popupProfile);
-};
-
-/** обработчик события - обновление информации профиля из заполненных input */
-function handleSubmitFormProfile(evt) {
-  evt.preventDefault();
-  titleProfile.textContent = inputNameProfile.value;
-  subtitleProfile.textContent = inputJobProfile.value;
-  closePopup(popupProfile);
-}
-
 /** обработчик события - открыть popup для добавления нового места */
 function handleButtonAddPlace() {
-  formPlace.reset();  //сбрасываем форму при каждом открытии, т.к. нет кнопки "очистить"
   placeFormValidator.resetValidation();
-  openPopup(popupPlace);
+  popupPlace.open();
 };
 
-/** функция генерации карточки в нужном месте страницы */
-function renderPlace(data, templateSelector) {
-  const card = new Card(data, templateSelector);
-  const cardPlace = card.createPlace();
-  containerPlaces.prepend(cardPlace);
+/** обработчик события - открыть popup для редактирования профиля */
+function handleButtonEditProfile() {
+  const user = userInfo.getUserInfo();
+  inputNameProfile.value = user.name;
+  inputJobProfile.value = user.job;
+  profileFormValidator.resetValidation();
+  popupProfile.open();
 };
 
 /** заполнение 6 карточек из коробки */
-initialPlaces.forEach((item) => {
-  renderPlace(item, '#element-template');
-});
-
-/** обработчик события - создание карточки из заполненных input */
-function handleSubmitFormPlace(evt) {
-  evt.preventDefault();
-  const inputsPlace = {   //создаем объект для передачи его на вход функции renderPlace()
-    name: inputNamePlace.value,
-    link: inputLinkPlace.value
-  };
-  renderPlace(inputsPlace, '#element-template');
-  closePopup(popupPlace);
-  //после Submit не сбрасываем форму, т.к. сбросим ее при открытии
-};
-
-/** обработчик события - закрыть popup при клике на оверлей или крестик*/
-function handleMousedownForClose(evt, popup) {
-  if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-btn')) {
-    closePopup(popup);
-  };
-};
+cardList.renderItems(initialPlaces);
 
 
-/** слушатель popup-ов для событий закрытия по крестику и оверлею */
-popupList.forEach(popup => {
-  popup.addEventListener('mousedown', evt => handleMousedownForClose(evt, popup));
-});
+/**Слушатели */
+/** слушатели popup-ов */
+popupProfile.setEventListeners();
+popupView.setEventListeners();
+popupPlace.setEventListeners();
 
 /** слушатель кнопки Edit */
 buttonEditProfile.addEventListener('click', handleButtonEditProfile);
 
 /** слушатель кнопки Add **/
 buttonAddPlace.addEventListener('click', handleButtonAddPlace);
-
-/** слушатель submit в форме Profile */
-formProfile.addEventListener('submit', handleSubmitFormProfile);
-
-/** слушатель submit в форме Place */
-formPlace.addEventListener('submit', handleSubmitFormPlace);

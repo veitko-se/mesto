@@ -1,17 +1,10 @@
-import {
-  popupView,
-  titleView,
-  imageView
-} from './constants.js';
-import { openPopup } from './util.js';
-
-
 /** класс карточек */
 export default class Card {
-  constructor(data, templateSelector) {
-    this._name = data.name;
-    this._link = data.link;
+  constructor({name, link}, templateSelector, handleCardClick) {
+    this._name = name;
+    this._link = link;
     this._templateSelector = templateSelector;
+    this._handleClickImagePlace = handleCardClick;
     this._element = null;
     this._elementImage = null;
     this._elementTitle = null;
@@ -34,15 +27,7 @@ export default class Card {
     evt.target.classList.toggle('element__like-btn_active');
   };
 
-  /** приватный метод - обработчик события - клик по картинке */
-  _handleClickImagePlace() {
-    titleView.textContent = this._name;
-    imageView.src = this._link;
-    imageView.alt = this._name;
-    openPopup(popupView);
-  };
-
-  /** приватный метод - обработчик события - лайк */
+  /** приватный метод - обработчик события - удалить */
   _handleClickBtnTrash() {
     this._element.remove();
   };
@@ -51,7 +36,7 @@ export default class Card {
   _setEventListeners() {
     this._elementBtnTrash.addEventListener('click', () => this._handleClickBtnTrash());
     this._elementBtnLike.addEventListener('click', this._handleClickBtnLike);
-    this._elementImage.addEventListener('click', () => this._handleClickImagePlace());
+    this._elementImage.addEventListener('click', () => this._handleClickImagePlace({name: this._name, link: this._link}));
   };
 
   /** публичный метод формирования карточек со всеми их интерактивными элементами */
@@ -61,11 +46,9 @@ export default class Card {
     this._elementTitle = this._element.querySelector('.element__text');
     this._elementBtnTrash = this._element.querySelector('.element__trash-btn');
     this._elementBtnLike = this._element.querySelector('.element__like-btn');
-
     this._elementTitle.textContent = this._name;
     this._elementImage.src = this._link;
     this._elementImage.alt = this._name;
-    
     this._setEventListeners();
     return this._element;
   };

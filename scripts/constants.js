@@ -1,28 +1,23 @@
-/** раздел Профиль + кнопка Add */
-const titleProfile = document.querySelector('.profile__info-title');
-const subtitleProfile = document.querySelector('.profile__info-subtitle');
+/** кнопка на странице */
 const buttonEditProfile = document.querySelector('.profile__edit-btn');
 const buttonAddPlace = document.querySelector('.profile__add-btn');
 
-/** раздел Места */
-const containerPlaces = document.querySelector('.elements');
-
-/** popup-ы */
-const popupList = Array.from(document.querySelectorAll('.popup'));
-
-const popupProfile = document.querySelector('#popup-profile');
+/** формы */
+const formPlace = document.forms.place;
 const formProfile = document.forms.profile;
 const inputNameProfile = formProfile.elements.titleProfile;
 const inputJobProfile = formProfile.elements.subtitleProfile;
 
-const popupPlace = document.querySelector('#popup-place');
-const formPlace = document.forms.place;
-const inputNamePlace = formPlace.elements.namePlace;
-const inputLinkPlace = formPlace.elements.linkPlace;
+/** селекторы элементов страницы */
+const selectorPopupProfile = '#popup-profile';
+const selectorUserName = '.profile__info-title';
+const selectorUserJob ='.profile__info-subtitle';
 
-const popupView = document.querySelector('#popup-photo');
-const titleView = popupView.querySelector('.popup__title_type_photo');
-const imageView = popupView.querySelector('.popup__photo');
+const selectorPopupView = '#popup-photo';
+
+const selectorPopupPlace = '#popup-place';
+const selectorCardTemplate = '#element-template';
+const selectorCardSection = '.elements';
 
 /** список настроек форм, передается в экземпляр класса валидации */
 const formValidationConfig = {
@@ -34,22 +29,18 @@ const formValidationConfig = {
 };
 
 export {
-  titleProfile,
-  subtitleProfile,
   buttonEditProfile,
   buttonAddPlace,
-  containerPlaces,
-  popupList,
-  popupProfile,
   formProfile,
   inputNameProfile,
   inputJobProfile,
-  popupPlace,
   formPlace,
-  inputNamePlace,
-  inputLinkPlace,
-  popupView,
-  titleView,
-  imageView,
-  formValidationConfig
+  formValidationConfig,
+  selectorPopupProfile,
+  selectorUserName,
+  selectorUserJob,
+  selectorPopupView,
+  selectorCardTemplate,
+  selectorPopupPlace,
+  selectorCardSection
  }
