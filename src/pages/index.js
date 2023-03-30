@@ -1,3 +1,4 @@
+import './index.css';
 import { initialPlaces } from '../utils/places.js';
 import {
   buttonEditProfile,
