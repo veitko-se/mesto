@@ -46,21 +46,21 @@ const popupProfile = new PopupWithForm({
 });
 
 /** 3. Карточки мест */
-/** экземляр класса: попапа для открытия карточки места*/
+/** функция для добавления карточки */
+const renderCard = (item) => {
+  const card = new Card(item, selectorCardTemplate, popupView.open.bind(popupView));
+  const cardElement = card.createPlace();
+  cardList.addItem(cardElement);
+};
+/** экземляр класса: попап для открытия карточки места*/
 const popupView = new PopupWithImage(selectorPopupView);
 /** экземляр класса: секция с карточками мест*/
-const cardList = new Section({
-  renderer: (item) => {
-    const card = new Card(item, selectorCardTemplate, popupView.open.bind(popupView));
-    const cardElement = card.createPlace();
-    cardList.addItem(cardElement);
-  }
-}, selectorCardSection);
+const cardList = new Section({renderer: renderCard}, selectorCardSection);
 /** экземляр класса: попап для добавления нового места*/
 const popupPlace = new PopupWithForm({
   selector: selectorPopupPlace,
   handleFormSubmit: (formData) => {
-    cardList.renderItems([{name: formData.namePlace, link: formData.linkPlace}]);
+    renderCard({name: formData.namePlace, link: formData.linkPlace}); //renderCard() использует метод addItem()
   }
 });
 

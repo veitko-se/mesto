@@ -5,7 +5,7 @@ export default class Section {
     this._container = document.querySelector(selector);
   }
 
-  /** публичный метод - генерация элемента секции с помощью передаваемой в конструктор функции */
+  /** публичный метод - генерация элементов секции с помощью передаваемой в конструктор функции */
   renderItems(items) {
     items.forEach(item => this._renderer(item))
   }

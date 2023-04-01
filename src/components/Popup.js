@@ -2,6 +2,8 @@
 export default class Popup {
   constructor(selector) {
     this._popup = document.querySelector(selector);
+    this._handleEscClose = this._handleEscClose.bind(this);
+    this._handleMousedownClose = this._handleMousedownClose.bind(this);
   }
 
   /** приватный метод - обработчик события - закрыть popup при нажатии Esc */
@@ -21,17 +23,17 @@ export default class Popup {
   /** публичный метод - функция открытия Popup */
   open() {
     this._popup.classList.add('popup_opened');
-    document.addEventListener('keydown', this._handleEscClose.bind(this));
+    document.addEventListener('keydown', this._handleEscClose);
   }
 
   /** публичный метод - функция закрытия Popup */
   close() {
     this._popup.classList.remove('popup_opened');
-    document.removeEventListener('keydown', this._handleEscClose.bind(this));
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   /** публичный метод - слушатель popup-ов для событий закрытия по крестику и оверлею */
   setEventListeners() {
-    this._popup.addEventListener('mousedown', this._handleMousedownClose.bind(this));
+    this._popup.addEventListener('mousedown', this._handleMousedownClose);
   }
 }
