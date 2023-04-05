@@ -60,7 +60,7 @@ const cardList = new Section({renderer: renderCard}, selectorCardSection);
 const popupPlace = new PopupWithForm({
   selector: selectorPopupPlace,
   handleFormSubmit: (formData) => {
-    renderCard({name: formData.namePlace, link: formData.linkPlace}); //renderCard() использует метод addItem()
+    renderCard({name: formData.namePlace, link: formData.linkPlace});
   }
 });
 
