@@ -12,6 +12,7 @@ const inputJobProfile = formProfile.elements.subtitleProfile;
 const selectorPopupProfile = '#popup-profile';
 const selectorUserName = '.profile__info-title';
 const selectorUserJob ='.profile__info-subtitle';
+const selectorUserAvatar ='.profile__avatar';
 
 const selectorPopupView = '#popup-photo';
 
@@ -39,6 +40,7 @@ export {
   selectorPopupProfile,
   selectorUserName,
   selectorUserJob,
+  selectorUserAvatar,
   selectorPopupView,
   selectorCardTemplate,
   selectorPopupPlace,

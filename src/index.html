@@ -17,11 +17,14 @@
   <main class="content">
 
     <section class="profile">
-      <img src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар" class="profile__avatar">
+      <div class="profile__avatar-container">
+        <img src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар" class="profile__avatar">
+        <button type="button" class="profile__avatar-btn" aria-label="Изменить аватар"></button>
+      </div>
       <div class="profile__info">
-        <h1 class="profile__info-title">Жак-Ив Кусто</h1>
+        <h1 class="profile__info-title placeholder-loading">................................................</h1>
         <button type="button" class="profile__edit-btn" aria-label="Редактировать профиль"></button>
-        <h2 class="profile__info-subtitle">Исследователь океана</h2>
+        <h2 class="profile__info-subtitle placeholder-loading">................................................</h2>
       </div>
       <button type="button" class="profile__add-btn" aria-label="Добавить фото"></button>
     </section>
@@ -40,7 +43,10 @@
       <button type="button" class="element__trash-btn" aria-label="Удалить"></button>
       <div class="element__footer">
         <h3 class="element__text"></h3>
-        <button type="button" class="element__like-btn" aria-label="Нравится"></button>
+        <div class="element__like">
+          <button type="button" class="element__like-btn" aria-label="Нравится"></button>
+          <p class="element__like-count">0<p>
+        </div>
       </div>
     </article>
   </template>
@@ -132,6 +138,41 @@
       <button type="button" class="popup__close-btn" aria-label="Закрыть окно"></button>
       <img src="<%=require('./images/header-logo.svg')%>" alt="Изображение" class="popup__photo">
       <h2 class="popup__title popup__title_type_photo">Изображение</h2>
+    </div>
+  </section>
+
+  <section class="popup" id="popup-confirm">
+    <div class="popup__container popup__container_type_confirm">
+      <button type="button" class="popup__close-btn" aria-label="Закрыть окно"></button>
+      <h2 class="popup__title popup__title_type_confirm">Вы уверены?</h2>
+      <form class="popup__form" name="confirm" id="form-confirm" novalidate>
+        <button type="submit" class="popup__save-btn">Да</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="popup" id="popup-avatar">
+    <div class="popup__container popup__container_type_avatar">
+      <button type="button" class="popup__close-btn" aria-label="Закрыть окно"></button>
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form class="popup__form" name="avatar" id="form-avatar" novalidate>
+
+        <label class="popup__field">
+          <input
+            aria-label="Ссылка на аватар"
+            type="url"
+            class="popup__input"
+            id="input-avatar-link"
+            placeholder="Ссылка на аватар"
+            required
+            name="linkAvatar"
+          >
+          <span class="popup__error" id="input-avatar-link-error"></span>
+        </label>
+
+        <button type="submit" class="popup__save-btn">Сохранить</button>
+
+      </form>
     </div>
   </section>
 

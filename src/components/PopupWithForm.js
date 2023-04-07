@@ -33,13 +33,24 @@ export default class PopupWithForm extends Popup {
     this._element.reset();
   }
 
+  findButtonOriginalText() {
+    this._element = this._getElement();
+    this._buttonElement = this._element.querySelector('.popup__save-btn');
+    this._buttonOriginalText = this._buttonElement.textContent;
+    return this._buttonOriginalText
+  };
+
+  setButtonText(newText) {
+    this._buttonElement.textContent = newText;
+  }
+
   /** приватный метод - слушатель submit в форме */
   _setEventListenersForForm() {
     this._element = this._getElement();
     this._element.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
-      this.close();
+
     })
   }
 
