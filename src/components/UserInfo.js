@@ -7,27 +7,18 @@ export default class UserInfo {
     this._userInfo = null;
   }
 
-  /** публичный метод - вернуть объект с информацией о пользователе */
-  getUserInfo() {
-    return this._userInfo;
-  }
-
+  /** публичный метод - записать новую информацию о пользователе */
   setUserInfo(newUserInfo) {
     this._userInfo = newUserInfo;
-    this._setUserInfo({titleProfile: this._userInfo.name, subtitleProfile: this._userInfo.about});
-    this._setUserAvatar({photoProfile: this._userInfo.avatar});
+    this._userNameContainer.textContent = this._userInfo.name;
+    this._userJobContainer.textContent = this._userInfo.about;
+    this._userAvatarContainer.src = this._userInfo.avatar;
     this._renderLoading();
   }
 
-  /** приватный метод - запись новой информации о пользователе в DOM*/
-  _setUserInfo({ titleProfile, subtitleProfile }) {
-    this._userNameContainer.textContent = titleProfile;
-    this._userJobContainer.textContent = subtitleProfile;
-  }
-
-  /** приватный метод - запись нового фото пользователя в DOM*/
-  _setUserAvatar({ photoProfile }) {
-    this._userAvatarContainer.src = photoProfile;
+  /** публичный метод - вернуть объект с информацией о пользователе */
+  getUserInfo() {
+    return this._userInfo;
   }
 
   /** приватный метод - убрать анимацию загрузки текста*/
@@ -35,5 +26,4 @@ export default class UserInfo {
     this._userNameContainer.classList.remove('placeholder-loading');
     this._userJobContainer.classList.remove('placeholder-loading');
   };
-
 }

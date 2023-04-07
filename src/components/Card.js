@@ -1,24 +1,24 @@
 /** класс карточек */
 export default class Card {
-  constructor({ name, link, likes, owner, _id }, templateSelector, handleCardClick, putLike, deleteLike, handleClickBtnTrash, deleteCard) {
+  constructor({ name, link, likes, owner, _id }, templateSelector, handleCardClick, handleClickBtnTrash, putLike, deleteLike, deleteCard) {
     this.name = name;
     this.link = link;
     this._likes = likes;
     this._owner = owner;
-    this._id = _id;
+    this._idCard = _id;
     this._templateSelector = templateSelector;
     this._handleClickImagePlace = handleCardClick;
+    this._handleClickBtnTrash = handleClickBtnTrash;
     this._putLike = putLike;
     this._deleteLike = deleteLike;
-    this._deleteCard = deleteCard
+    this._deleteCard = deleteCard;
+    this._handleClickBtnLike = this._handleClickBtnLike.bind(this);
     this._element = null;
     this._elementImage = null;
     this._elementTitle = null;
     this._elementBtnTrash = null;
     this._elementBtnLike = null;
     this._elementCountLike = null;
-    this._handleClickBtnLike = this._handleClickBtnLike.bind(this);
-    this._handleClickBtnTrash = handleClickBtnTrash;
     this._toggled = false;
   }
 
@@ -32,51 +32,25 @@ export default class Card {
     return cardPlace;
   }
 
-  _initIsCardLiked(userId) {
-    for (let i = 0; i < this._likes.length; i += 1) {
-      if (this._likes[i]._id === userId) {
-        this._toggled = true;
-        this._elementBtnLike.classList.add('element__like-btn_active');
-        return
-      }
-    }
-    this._toggled = false;
-    this._elementBtnLike.classList.remove('element__like-btn_active');
+  /** приватный метод - обновление состояния кнопки Лайк */
+  _updateLikeStatus(updatedCard, toggled) {
+      this._likes = updatedCard.likes;
+      this._elementCountLike.textContent = this._likes.length;
+      this._toggled = toggled;
   };
 
-  _initCanDelete(userId) {
-    if (this._owner._id !== userId) {
-      this._elementBtnTrash.remove();
-    }
-  }
-
-  /** приватный метод - обработчик события - лайк */
+  /** приватный метод - обработчик события - Лайк */
   _handleClickBtnLike() {
     if (this._toggled) {
-      this._deleteLike(this._id)
-        .then(updatedCard => {
-          this._likes = updatedCard.likes;
-          this._elementCountLike.textContent = this._likes.length;
-          this._toggled = false;
-        })
-        .then(
-          this._elementBtnLike.classList.remove('element__like-btn_active')
-        )
+      this._deleteLike(this._idCard)
+        .then(updatedCard => this._updateLikeStatus(updatedCard, false))
+        .then(this._elementBtnLike.classList.remove('element__like-btn_active'))
     } else {
-      this._putLike(this._id)
-        .then(updatedCard => {
-          this._likes = updatedCard.likes;
-          this._elementCountLike.textContent = this._likes.length;
-          this._toggled = true;
-        }).then(
-          this._elementBtnLike.classList.add('element__like-btn_active')
-        )
+      this._putLike(this._idCard)
+        .then(updatedCard => this._updateLikeStatus(updatedCard, true))
+        .then(this._elementBtnLike.classList.add('element__like-btn_active'))
     }
   };
-
-  deleteCard() {
-    this._deleteCard(this._id).then(this._element.remove());
-  }
 
   /** приватный метод - слушатели для карточки */
   _setEventListeners() {
@@ -85,7 +59,25 @@ export default class Card {
     this._elementImage.addEventListener('click', () => this._handleClickImagePlace({ name: this.name, link: this.link }));
   };
 
-  /** публичный метод формирования карточек со всеми их интерактивными элементами */
+  /** приватный метод - инициализация состояния лайка */
+  _initIsCardLiked(currentUserId) {
+    if (this._likes.some(likeUser => {return likeUser._id === currentUserId})) {
+      this._toggled = true;
+      this._elementBtnLike.classList.add('element__like-btn_active');
+    } else {
+      this._toggled = false;
+      this._elementBtnLike.classList.remove('element__like-btn_active');
+    };
+  };
+
+  /** приватный метод - инициализация возможности удаления */
+  _initCanDelete(currentUserId) {
+    if (this._owner._id !== currentUserId) {
+      this._elementBtnTrash.remove();
+    }
+  }
+
+  /** публичный метод - формирование карточек со всеми их интерактивными элементами */
   createPlace(currentUserId) {
     this._element = this._getTemplate();
     this._elementImage = this._element.querySelector('.element__image');
@@ -97,9 +89,15 @@ export default class Card {
     this._elementImage.src = this.link;
     this._elementImage.alt = this.name;
     this._elementCountLike.textContent = this._likes.length;
-    this._setEventListeners();
     this._initIsCardLiked(currentUserId);
     this._initCanDelete(currentUserId);
+    this._setEventListeners();
     return this._element;
   };
+
+  /** публичный метод - удаление карточки */
+  deleteCard() {
+    this._deleteCard(this._idCard)
+      .then(this._element.remove());
+  }
 }

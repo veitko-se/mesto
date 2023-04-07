@@ -2,16 +2,19 @@ import './index.css';
 import {
   buttonEditProfile,
   buttonAddPlace,
+  buttonEditAvatar,
   formProfile,
   inputNameProfile,
   inputJobProfile,
   formPlace,
+  formAvatar,
   formValidationConfig,
   selectorPopupProfile,
   selectorUserName,
   selectorUserJob,
   selectorUserAvatar,
   selectorPopupView,
+  selectorPopupAvatar,
   selectorCardTemplate,
   selectorPopupPlace,
   selectorCardSection
@@ -21,10 +24,12 @@ import FormValidator from '../components/FormValidator.js';
 import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
-import PopupConfirm from '../components/PopupConfirm.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
 
+
+/********** API **********/
+/** экземляр класса*/
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-62',
   headers: {
@@ -33,48 +38,29 @@ const api = new Api({
   }
 });
 
-function createPopupConfirm(card) {
-  const selectorPopupConfirm = '#popup-confirm';
-  const popupConfirm = new PopupConfirm({
-    selector: selectorPopupConfirm,
-    handleFormSubmit: () => {
-      card.deleteCard()
-    }
-  });
-  popupConfirm.setEventListeners();
-  popupConfirm.open()
-  return popupConfirm;
-}
 
-/** Объявление переменных */
-/** 1. Валидация */
-/** экземляр класса: валидация для формы с информацией о пользователе*/
-const profileFormValidator = new FormValidator(formValidationConfig, formProfile);
-/** экземляр класса: валидация для формы добавления нового места*/
-const placeFormValidator = new FormValidator(formValidationConfig, formPlace);
-
-const formAvatar = document.forms.avatar;
-const avatarFormValidator = new FormValidator(formValidationConfig, formAvatar);
-
-/** 2. Пользователь */
+/********** ПОЛЬЗОВАТЕЛЬ **********/
 /** экземляр класса: информация о пользователе*/
 const userInfo = new UserInfo({
   selectorUserName: selectorUserName,
   selectorUserJob: selectorUserJob,
   selectorUserAvatar: selectorUserAvatar,
 });
-// /** загружаем информацию о пользователе с сервера */
-api.loadUserData().then(res => userInfo.setUserInfo(res));
 
-/** экземляр класса: попап с информацией о пользователе*/
+/** загружаем информацию о пользователе с сервера */
+api.loadUserInfo().then(res => userInfo.setUserInfo(res));
+
+
+/********** Попап с информацией о пользователе **********/
+/** экземляр класса*/
 const popupProfile = new PopupWithForm({
   selector: selectorPopupProfile,
   handleFormSubmit: (formData) => {
     const originalText = popupProfile.findButtonOriginalText()
     popupProfile.setButtonText('Сохранение...')
     api.updateUserInfo(formData)
-      .then(updatedUSerData => {
-        userInfo.setUserInfo(updatedUSerData);
+      .then(newUserInfo => {
+        userInfo.setUserInfo(newUserInfo);
       })
       .finally(() => {
         popupProfile.close();
@@ -83,85 +69,14 @@ const popupProfile = new PopupWithForm({
   }
 });
 
-function createCard(cardInfo) {
-  return new Card(
-    cardInfo,
-    selectorCardTemplate,
-    popupView.open.bind(popupView),
-    api.putLike.bind(api),
-    api.deleteLike.bind(api),
-    createPopupConfirm,
-    api.deleteCard.bind(api)
-  );
-}
+/** вешаем слушатель */
+popupProfile.setEventListeners();
 
-/** 3. Карточки мест */
-/** экземляр класса: попап для открытия карточки места*/
-const popupView = new PopupWithImage(selectorPopupView);
-/** экземляр класса: секция с карточками мест*/
-const cardList = new Section({
-  renderer: (item) => {
-    const userMe = userInfo.getUserInfo();
-    const card = createCard(item);
-    const cardElement = card.createPlace(userMe._id);
-    cardList.addItem(cardElement)
-  }
-},
-  selectorCardSection);
-/** экземляр класса: попап для добавления нового места*/
-const popupPlace = new PopupWithForm({
-  selector: selectorPopupPlace,
-  handleFormSubmit: (formData) => {
-    const userMe = userInfo.getUserInfo();
-    const originalText = popupPlace.findButtonOriginalText()
-    popupPlace.setButtonText('Сохранение...')
-    api.pushCard({ name: formData.namePlace, link: formData.linkPlace })
-      .then(newCard => {return createCard(newCard)})
-      .then(card => card.createPlace(userMe._id))
-      .then(cardElement => {
-        cardList.addItem(cardElement);
-      })
-      .finally(() => {
-        popupPlace.close();
-        popupPlace.setButtonText(originalText);
-      });
-  }
-});
-
-/** Логика страницы */
-/** включение валидации на странице для каждой из форм*/
+/** включаем валидацию */
+const profileFormValidator = new FormValidator(formValidationConfig, formProfile);
 profileFormValidator.enableValidation();
-placeFormValidator.enableValidation();
-avatarFormValidator.enableValidation();
 
-/** обработчик события - открыть popup для добавления нового места */
-function handleButtonAddPlace() {
-  placeFormValidator.resetValidation();
-  popupPlace.open();
-};
-
-const selectorPopupAvatar = '#popup-avatar'
-const popupAvatar = new PopupWithForm({
-  selector: selectorPopupAvatar,
-  handleFormSubmit: (formData) => {
-    const originalText = popupAvatar.findButtonOriginalText()
-    popupAvatar.setButtonText('Сохранение...')
-    api.updateUserAvatar(formData.linkAvatar)
-      .then(newUserMe => {
-        userInfo.setUserInfo(newUserMe);
-      })
-      .finally(() => {
-        popupAvatar.close();
-        popupAvatar.setButtonText(originalText);
-      });
-  }
-})
-function handleButtonEditAvatar() {
-  avatarFormValidator.resetValidation();
-  popupAvatar.open();
-};
-
-/** обработчик события - открыть popup для редактирования профиля */
+/** обработчик кнопки Edit - открыть popup */
 function handleButtonEditProfile() {
   const userMe = userInfo.getUserInfo();
   inputNameProfile.value = userMe.name;
@@ -170,23 +85,132 @@ function handleButtonEditProfile() {
   popupProfile.open();
 };
 
+/** слушатель кнопки Edit */
+buttonEditProfile.addEventListener('click', handleButtonEditProfile);
+
+
+/********** Попап для редактирования аватара **********/
+/** экземляр класса */
+const popupAvatar = new PopupWithForm({
+  selector: selectorPopupAvatar,
+  handleFormSubmit: (formData) => {
+    const originalText = popupAvatar.findButtonOriginalText()
+    popupAvatar.setButtonText('Сохранение...')
+    api.updateUserAvatar(formData.linkAvatar)
+      .then(newUserInfo => {
+        userInfo.setUserInfo(newUserInfo);
+      })
+      .finally(() => {
+        popupAvatar.close();
+        popupAvatar.setButtonText(originalText);
+      });
+  }
+});
+
+/** вешаем слушатель */
+popupAvatar.setEventListeners();
+
+/** включаем валидацию */
+const avatarFormValidator = new FormValidator(formValidationConfig, formAvatar);
+avatarFormValidator.enableValidation();
+
+/** обработчик кнопки Edit Avatar - открыть popup */
+function handleButtonEditAvatar() {
+  avatarFormValidator.resetValidation();
+  popupAvatar.open();
+};
+
+/** слушатель кнопки Edit Avatar **/
+buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
+
+
+/********** КАРТОЧКИ МЕСТ **********/
+/********** Попап для просмотра карточек **********/
+/** экземляр класса */
+const popupView = new PopupWithImage(selectorPopupView);
+
+/** вешаем слушатель */
+popupView.setEventListeners();
+
+
+/********** Попап для подтверждения удаления **********/
+/** функция для создания экземпляра класса */
+function createPopupConfirm(card) {
+  const selectorPopupConfirm = '#popup-confirm';
+  const popupConfirm = new PopupWithForm({
+    selector: selectorPopupConfirm,
+    handleFormSubmit: () => {
+      card.deleteCard();
+      popupConfirm.close();
+    }
+  });
+  popupConfirm.setEventListeners();
+  popupConfirm.open()
+  return popupConfirm;
+}
+
+
+/********** Карточки **********/
+/** функция для создания экземпляра класса карточки места*/
+function createCard(cardInfo) {
+  return new Card(
+    cardInfo,
+    selectorCardTemplate,
+    popupView.open.bind(popupView),
+    createPopupConfirm,
+    api.putLike.bind(api),
+    api.deleteLike.bind(api),
+    api.deleteCard.bind(api)
+  );
+}
+
+
+/********** Секция с карточками **********/
+/** экземляр класса*/
+const cardList = new Section({
+  renderer: (item) => {
+    const userMe = userInfo.getUserInfo();
+    const card = createCard(item);
+    const cardElement = card.createPlace(userMe._id);
+    cardList.addItem(cardElement)
+  }},
+  selectorCardSection);
+
 /** заполнение 6 карточек из коробки */
 api.loadInitialCards().then(cards => cardList.renderItems(cards.reverse()));
 
 
-/**Слушатели */
-/** слушатели popup-ов */
-popupProfile.setEventListeners();
-popupView.setEventListeners();
-popupPlace.setEventListeners();
-popupAvatar.setEventListeners();
+/********** Попап для добавления нового места **********/
+/** экземляр класса */
+const popupPlace = new PopupWithForm({
+  selector: selectorPopupPlace,
+  handleFormSubmit: (formData) => {
+    const userMe = userInfo.getUserInfo();
+    const originalText = popupPlace.findButtonOriginalText()
+    popupPlace.setButtonText('Сохранение...')
+    api.pushCard({ name: formData.namePlace, link: formData.linkPlace })
+      .then(newCard => createCard(newCard))
+      .then(card => card.createPlace(userMe._id))
+      .then(cardElement => cardList.addItem(cardElement))
+      .finally(() => {
+        popupPlace.close();
+        popupPlace.setButtonText(originalText);
+      });
+  }
+});
 
-/** слушатель кнопки Edit */
-buttonEditProfile.addEventListener('click', handleButtonEditProfile);
+/** вешаем слушатель */
+popupPlace.setEventListeners();
+
+/** вкючаем валидацию*/
+const placeFormValidator = new FormValidator(formValidationConfig, formPlace);
+placeFormValidator.enableValidation();
+
+/** обработчик кнопки Add - открыть popup*/
+function handleButtonAddPlace() {
+  placeFormValidator.resetValidation();
+  popupPlace.open();
+};
 
 /** слушатель кнопки Add **/
 buttonAddPlace.addEventListener('click', handleButtonAddPlace);
-
-const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
-buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
-

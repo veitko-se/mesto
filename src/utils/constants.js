@@ -1,12 +1,16 @@
 /** кнопки на странице */
 const buttonEditProfile = document.querySelector('.profile__edit-btn');
 const buttonAddPlace = document.querySelector('.profile__add-btn');
+const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
 
 /** формы */
 const formPlace = document.forms.place;
+
 const formProfile = document.forms.profile;
 const inputNameProfile = formProfile.elements.titleProfile;
 const inputJobProfile = formProfile.elements.subtitleProfile;
+
+const formAvatar = document.forms.avatar;
 
 /** селекторы элементов страницы */
 const selectorPopupProfile = '#popup-profile';
@@ -15,6 +19,8 @@ const selectorUserJob ='.profile__info-subtitle';
 const selectorUserAvatar ='.profile__avatar';
 
 const selectorPopupView = '#popup-photo';
+
+const selectorPopupAvatar = '#popup-avatar';
 
 const selectorPopupPlace = '#popup-place';
 const selectorCardTemplate = '#element-template';
@@ -32,16 +38,19 @@ const formValidationConfig = {
 export {
   buttonEditProfile,
   buttonAddPlace,
+  buttonEditAvatar,
   formProfile,
   inputNameProfile,
   inputJobProfile,
   formPlace,
+  formAvatar,
   formValidationConfig,
   selectorPopupProfile,
   selectorUserName,
   selectorUserJob,
   selectorUserAvatar,
   selectorPopupView,
+  selectorPopupAvatar,
   selectorCardTemplate,
   selectorPopupPlace,
   selectorCardSection

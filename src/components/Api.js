@@ -1,3 +1,4 @@
+/** Класс для работы с API сервера */
 export default class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
@@ -5,15 +6,15 @@ export default class Api {
     this._headers = headers;
   }
 
-  /** UserInfo публичный метод - получение аватарки+информации о пользователе с сервера */
-  loadUserData() {
+  /** загрузить данные о пользователе с сервера */
+  loadUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: {
         authorization: this._authorization
       }
     })
       .then(res => {
-        if (res.ok) { return res.json(); }
+        if (res.ok) { return res.json() }
         return Promise.reject(res.status);
       })
       .catch(err => {
@@ -21,23 +22,7 @@ export default class Api {
       })
   }
 
-  /** Section публичный метод - загрузка карточек с сервера */
-  loadInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        authorization: this._authorization
-      }
-    })
-      .then(res => {
-        if (res.ok) { return res.json(); }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
-  }
-
-  /** UserInfo публичный метод - обновление информации о пользователе */
+  /** обновить информацию о пользователе */
   updateUserInfo(newInfo) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
@@ -48,7 +33,7 @@ export default class Api {
       })
     })
       .then(res => {
-        if (res.ok) { return res.json(); }
+        if (res.ok) { return res.json() }
         return Promise.reject(res.status);
       })
       .catch(err => {
@@ -56,7 +41,7 @@ export default class Api {
       });
   }
 
-  /** UserInfo публичный метод - обновление аватара */
+  /** обновить аватар */
   updateUserAvatar(newAvatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
@@ -66,7 +51,7 @@ export default class Api {
       })
     })
       .then(res => {
-        if (res.ok) { return res.json(); }
+        if (res.ok) { return res.json() }
         return Promise.reject(res.status);
       })
       .catch(err => {
@@ -74,8 +59,23 @@ export default class Api {
       });
   }
 
+  /** загрузить карточки с сервера */
+  loadInitialCards() {
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: {
+        authorization: this._authorization
+      }
+    })
+      .then(res => {
+        if (res.ok) { return res.json() }
+        return Promise.reject(res.status);
+      })
+      .catch(err => {
+        console.log(`Ошибка: ${err}`)
+      });
+  }
 
-  /** Card публичный метод - отправить карточку на сервер */
+  /** отправить карточку на сервер */
   pushCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
@@ -86,7 +86,7 @@ export default class Api {
       })
     })
       .then(res => {
-        if (res.ok) { return res.json(); }
+        if (res.ok) { return res.json() }
         return Promise.reject(res.status);
       })
       .catch(err => {
@@ -94,41 +94,14 @@ export default class Api {
       });
   }
 
-  putLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-        method: 'PUT',
-        headers: this._headers
-      })
-        .then(res => {
-          if (res.ok) { return res.json(); }
-          return Promise.reject(res.status);
-        })
-        .catch(err => {
-          console.log(`Ошибка: ${err}`)
-        });
-    }
-
-  deleteLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: 'DELETE',
-      headers: this._headers
-    })
-      .then(res => {
-        if (res.ok) { return res.json(); }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
-  }
-
+  /** удалить карточку на сервере */
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
     })
       .then(res => {
-        if (res.ok) { return res.json(); }
+        if (res.ok) { return res.json() }
         return Promise.reject(res.status);
       })
       .catch(err => {
@@ -136,4 +109,33 @@ export default class Api {
       });
   }
 
+  /** отправить лайк на сервер */
+  putLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: this._headers
+    })
+      .then(res => {
+        if (res.ok) { return res.json() }
+        return Promise.reject(res.status);
+      })
+      .catch(err => {
+        console.log(`Ошибка: ${err}`)
+      });
+  }
+
+  /** удалить лайк на сервере */
+  deleteLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(res => {
+        if (res.ok) { return res.json() }
+        return Promise.reject(res.status);
+      })
+      .catch(err => {
+        console.log(`Ошибка: ${err}`)
+      });
+  }
 }
