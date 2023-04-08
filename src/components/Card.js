@@ -13,12 +13,12 @@ export default class Card {
     this._deleteLike = deleteLike;
     this._deleteCard = deleteCard;
     this._handleClickBtnLike = this._handleClickBtnLike.bind(this);
-    this._element = null;
-    this._elementImage = null;
-    this._elementTitle = null;
-    this._elementBtnTrash = null;
-    this._elementBtnLike = null;
-    this._elementCountLike = null;
+    this._element = this._getTemplate();
+    this._elementImage = this._element.querySelector('.element__image');
+    this._elementTitle = this._element.querySelector('.element__text');
+    this._elementBtnTrash = this._element.querySelector('.element__trash-btn');
+    this._elementBtnLike = this._element.querySelector('.element__like-btn');
+    this._elementCountLike = this._element.querySelector('.element__like-count');
     this._toggled = false;
   }
 
@@ -45,10 +45,12 @@ export default class Card {
       this._deleteLike(this._idCard)
         .then(updatedCard => this._updateLikeStatus(updatedCard, false))
         .then(this._elementBtnLike.classList.remove('element__like-btn_active'))
+        .catch(err => console.log(`Ошибка: ${err}`));
     } else {
       this._putLike(this._idCard)
         .then(updatedCard => this._updateLikeStatus(updatedCard, true))
         .then(this._elementBtnLike.classList.add('element__like-btn_active'))
+        .catch(err => console.log(`Ошибка: ${err}`));
     }
   };
 
@@ -79,12 +81,6 @@ export default class Card {
 
   /** публичный метод - формирование карточек со всеми их интерактивными элементами */
   createPlace(currentUserId) {
-    this._element = this._getTemplate();
-    this._elementImage = this._element.querySelector('.element__image');
-    this._elementTitle = this._element.querySelector('.element__text');
-    this._elementBtnTrash = this._element.querySelector('.element__trash-btn');
-    this._elementBtnLike = this._element.querySelector('.element__like-btn');
-    this._elementCountLike = this._element.querySelector('.element__like-count');
     this._elementTitle.textContent = this.name;
     this._elementImage.src = this.link;
     this._elementImage.alt = this.name;
@@ -95,9 +91,9 @@ export default class Card {
     return this._element;
   };
 
-  /** публичный метод - удаление карточки */
+  /** публичный метод - возвращает промис для удаления карточки */
   deleteCard() {
-    this._deleteCard(this._idCard)
+    return this._deleteCard(this._idCard)
       .then(this._element.remove());
   }
 }

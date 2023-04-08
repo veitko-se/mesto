@@ -6,6 +6,14 @@ export default class Api {
     this._headers = headers;
   }
 
+  /** приватный метод - проверка ответа сервера */
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res.status);
+  }
+
   /** загрузить данные о пользователе с сервера */
   loadUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
@@ -13,13 +21,7 @@ export default class Api {
         authorization: this._authorization
       }
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      })
+      .then(this._checkResponse);
   }
 
   /** обновить информацию о пользователе */
@@ -32,13 +34,7 @@ export default class Api {
         about: newInfo.subtitleProfile
       })
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** обновить аватар */
@@ -50,13 +46,7 @@ export default class Api {
         avatar: newAvatar
       })
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** загрузить карточки с сервера */
@@ -66,13 +56,7 @@ export default class Api {
         authorization: this._authorization
       }
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** отправить карточку на сервер */
@@ -85,13 +69,7 @@ export default class Api {
         link: link
       })
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** удалить карточку на сервере */
@@ -100,13 +78,7 @@ export default class Api {
       method: 'DELETE',
       headers: this._headers
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** отправить лайк на сервер */
@@ -115,13 +87,7 @@ export default class Api {
       method: 'PUT',
       headers: this._headers
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 
   /** удалить лайк на сервере */
@@ -130,12 +96,6 @@ export default class Api {
       method: 'DELETE',
       headers: this._headers
     })
-      .then(res => {
-        if (res.ok) { return res.json() }
-        return Promise.reject(res.status);
-      })
-      .catch(err => {
-        console.log(`Ошибка: ${err}`)
-      });
+      .then(this._checkResponse);
   }
 }

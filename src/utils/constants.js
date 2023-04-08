@@ -5,11 +5,7 @@ const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
 
 /** формы */
 const formPlace = document.forms.place;
-
 const formProfile = document.forms.profile;
-const inputNameProfile = formProfile.elements.titleProfile;
-const inputJobProfile = formProfile.elements.subtitleProfile;
-
 const formAvatar = document.forms.avatar;
 
 /** селекторы элементов страницы */
@@ -40,8 +36,6 @@ export {
   buttonAddPlace,
   buttonEditAvatar,
   formProfile,
-  inputNameProfile,
-  inputJobProfile,
   formPlace,
   formAvatar,
   formValidationConfig,

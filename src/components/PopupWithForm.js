@@ -6,10 +6,9 @@ export default class PopupWithForm extends Popup {
     super(selector);
     this._selector = selector;
     this._handleFormSubmit = handleFormSubmit;
-    this._element = null;
-    this._buttonElement = null;
-    this._buttonOriginalText = null;
-    this._inputList = null;
+    this._element = this._getElement();
+    this._buttonElement = this._element.querySelector('.popup__save-btn');
+    this._inputList = this._element.querySelectorAll('.popup__input');
     this._formValues = {};
   }
 
@@ -23,10 +22,14 @@ export default class PopupWithForm extends Popup {
 
   /** приватный метод получения значений полей формы */
   _getInputValues() {
-    this._inputList = this._element.querySelectorAll('.popup__input');
     this._formValues = {};
     this._inputList.forEach(input => this._formValues[input.name] = input.value);
     return this._formValues;
+  }
+
+  /** публичный метод - записать данные в поля формы */
+  setInputValues(data) {
+    this._inputList.forEach(input => input.value = data[input.name]);
   }
 
   /** перезапись родительского метода close */
@@ -35,25 +38,18 @@ export default class PopupWithForm extends Popup {
     this._element.reset();
   }
 
-  /** публичный метод - найти текст кнопки из верстки */
-  findButtonOriginalText() {
-    this._element = this._getElement();
-    this._buttonElement = this._element.querySelector('.popup__save-btn');
-    this._buttonOriginalText = this._buttonElement.textContent;
-    return this._buttonOriginalText;
-  };
-
-  /** публичный метод - подставить новый текст в кнопку во время загрузки данных */
-  setButtonText(newText) {
-    this._buttonElement.textContent = newText;
-  }
-
   /** приватный метод - слушатель submit в форме */
   _setEventListenersForForm() {
-    this._element = this._getElement();
     this._element.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      this._handleFormSubmit(this._getInputValues());
+      const initialText = this._buttonElement.textContent;
+      this._buttonElement.textContent = 'Сохранение...';
+      this._handleFormSubmit(this._getInputValues())
+        .then(() => this.close())
+        .catch(err => console.log(`Ошибка: ${err}`))
+        .finally(() => {
+          this._buttonElement.textContent = initialText;
+        });
     })
   }
 

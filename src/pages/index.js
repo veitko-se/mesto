@@ -4,8 +4,6 @@ import {
   buttonAddPlace,
   buttonEditAvatar,
   formProfile,
-  inputNameProfile,
-  inputJobProfile,
   formPlace,
   formAvatar,
   formValidationConfig,
@@ -47,24 +45,15 @@ const userInfo = new UserInfo({
   selectorUserAvatar: selectorUserAvatar,
 });
 
-/** загружаем информацию о пользователе с сервера */
-api.loadUserInfo().then(res => userInfo.setUserInfo(res));
-
 
 /********** Попап с информацией о пользователе **********/
 /** экземляр класса*/
 const popupProfile = new PopupWithForm({
   selector: selectorPopupProfile,
   handleFormSubmit: (formData) => {
-    const originalText = popupProfile.findButtonOriginalText()
-    popupProfile.setButtonText('Сохранение...')
-    api.updateUserInfo(formData)
+    return api.updateUserInfo(formData)
       .then(newUserInfo => {
         userInfo.setUserInfo(newUserInfo);
-      })
-      .finally(() => {
-        popupProfile.close();
-        popupProfile.setButtonText(originalText);
       });
   }
 });
@@ -79,8 +68,7 @@ profileFormValidator.enableValidation();
 /** обработчик кнопки Edit - открыть popup */
 function handleButtonEditProfile() {
   const userMe = userInfo.getUserInfo();
-  inputNameProfile.value = userMe.name;
-  inputJobProfile.value = userMe.about;
+  popupProfile.setInputValues({ titleProfile: userMe.name, subtitleProfile: userMe.about  })
   profileFormValidator.resetValidation();
   popupProfile.open();
 };
@@ -94,15 +82,9 @@ buttonEditProfile.addEventListener('click', handleButtonEditProfile);
 const popupAvatar = new PopupWithForm({
   selector: selectorPopupAvatar,
   handleFormSubmit: (formData) => {
-    const originalText = popupAvatar.findButtonOriginalText()
-    popupAvatar.setButtonText('Сохранение...')
-    api.updateUserAvatar(formData.linkAvatar)
+  return api.updateUserAvatar(formData.linkAvatar)
       .then(newUserInfo => {
         userInfo.setUserInfo(newUserInfo);
-      })
-      .finally(() => {
-        popupAvatar.close();
-        popupAvatar.setButtonText(originalText);
       });
   }
 });
@@ -139,10 +121,7 @@ function createPopupConfirm(card) {
   const selectorPopupConfirm = '#popup-confirm';
   const popupConfirm = new PopupWithForm({
     selector: selectorPopupConfirm,
-    handleFormSubmit: () => {
-      card.deleteCard();
-      popupConfirm.close();
-    }
+    handleFormSubmit: () => { return card.deleteCard() }
   });
   popupConfirm.setEventListeners();
   popupConfirm.open()
@@ -176,9 +155,6 @@ const cardList = new Section({
   }},
   selectorCardSection);
 
-/** заполнение 6 карточек из коробки */
-api.loadInitialCards().then(cards => cardList.renderItems(cards.reverse()));
-
 
 /********** Попап для добавления нового места **********/
 /** экземляр класса */
@@ -186,15 +162,11 @@ const popupPlace = new PopupWithForm({
   selector: selectorPopupPlace,
   handleFormSubmit: (formData) => {
     const userMe = userInfo.getUserInfo();
-    const originalText = popupPlace.findButtonOriginalText()
-    popupPlace.setButtonText('Сохранение...')
-    api.pushCard({ name: formData.namePlace, link: formData.linkPlace })
+    return api.pushCard({ name: formData.namePlace, link: formData.linkPlace })
       .then(newCard => createCard(newCard))
       .then(card => card.createPlace(userMe._id))
-      .then(cardElement => cardList.addItem(cardElement))
-      .finally(() => {
-        popupPlace.close();
-        popupPlace.setButtonText(originalText);
+      .then(cardElement => {
+        cardList.addItem(cardElement);
       });
   }
 });
@@ -214,3 +186,14 @@ function handleButtonAddPlace() {
 
 /** слушатель кнопки Add **/
 buttonAddPlace.addEventListener('click', handleButtonAddPlace);
+
+
+/********** ЗАГРУЗКА ДАННЫХ:
+ *  загружаем информацию о пользователе с сервера,
+ *  заполняем готовые карточки с сервера **********/
+Promise.all([api.loadUserInfo(), api.loadInitialCards()])
+  .then(([newUserInfo, initialCards]) => {
+    userInfo.setUserInfo(newUserInfo);
+    cardList.renderItems(initialCards.reverse());
+  })
+  .catch(err => console.log(`Ошибка: ${err}`));
