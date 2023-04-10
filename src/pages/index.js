@@ -13,6 +13,7 @@ import {
   selectorUserAvatar,
   selectorPopupView,
   selectorPopupAvatar,
+  selectorPopupConfirm,
   selectorCardTemplate,
   selectorPopupPlace,
   selectorCardSection
@@ -21,6 +22,7 @@ import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
 import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithConfirm from '../components/PopupWithConfirm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
@@ -116,17 +118,16 @@ popupView.setEventListeners();
 
 
 /********** Попап для подтверждения удаления **********/
-/** функция для создания экземпляра класса */
-function createPopupConfirm(card) {
-  const selectorPopupConfirm = '#popup-confirm';
-  const popupConfirm = new PopupWithForm({
-    selector: selectorPopupConfirm,
-    handleFormSubmit: () => { return card.deleteCard() }
-  });
-  popupConfirm.setEventListeners();
-  popupConfirm.open()
-  return popupConfirm;
-}
+/** экземляр класса */
+const popupConfirm = new PopupWithConfirm({
+  selector: selectorPopupConfirm,
+  handleFormSubmit: (cardId) => {
+    return api.deleteCard(cardId)
+  }
+});
+
+/** вешаем слушатель */
+popupConfirm.setEventListeners();
 
 
 /********** Карточки **********/
@@ -136,10 +137,9 @@ function createCard(cardInfo) {
     cardInfo,
     selectorCardTemplate,
     popupView.open.bind(popupView),
-    createPopupConfirm,
+    popupConfirm.open.bind(popupConfirm),
     api.putLike.bind(api),
     api.deleteLike.bind(api),
-    api.deleteCard.bind(api)
   );
 }
 

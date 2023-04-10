@@ -1,6 +1,6 @@
 /** класс карточек */
 export default class Card {
-  constructor({ name, link, likes, owner, _id }, templateSelector, handleCardClick, handleClickBtnTrash, putLike, deleteLike, deleteCard) {
+  constructor({ name, link, likes, owner, _id }, templateSelector, handleCardClick, handleClickBtnTrash, putLike, deleteLike) {
     this.name = name;
     this.link = link;
     this._likes = likes;
@@ -11,7 +11,6 @@ export default class Card {
     this._handleClickBtnTrash = handleClickBtnTrash;
     this._putLike = putLike;
     this._deleteLike = deleteLike;
-    this._deleteCard = deleteCard;
     this._handleClickBtnLike = this._handleClickBtnLike.bind(this);
     this._element = this._getTemplate();
     this._elementImage = this._element.querySelector('.element__image');
@@ -56,7 +55,7 @@ export default class Card {
 
   /** приватный метод - слушатели для карточки */
   _setEventListeners() {
-    this._elementBtnTrash.addEventListener('click', () => this._handleClickBtnTrash(this));
+    this._elementBtnTrash.addEventListener('click', () => this._handleClickBtnTrash(this._idCard, this._element));
     this._elementBtnLike.addEventListener('click', this._handleClickBtnLike);
     this._elementImage.addEventListener('click', () => this._handleClickImagePlace({ name: this.name, link: this.link }));
   };
@@ -90,10 +89,4 @@ export default class Card {
     this._setEventListeners();
     return this._element;
   };
-
-  /** публичный метод - возвращает промис для удаления карточки */
-  deleteCard() {
-    return this._deleteCard(this._idCard)
-      .then(this._element.remove());
-  }
 }

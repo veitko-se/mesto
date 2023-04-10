@@ -18,6 +18,8 @@ const selectorPopupView = '#popup-photo';
 
 const selectorPopupAvatar = '#popup-avatar';
 
+const selectorPopupConfirm = '#popup-confirm';
+
 const selectorPopupPlace = '#popup-place';
 const selectorCardTemplate = '#element-template';
 const selectorCardSection = '.elements';
@@ -45,6 +47,7 @@ export {
   selectorUserAvatar,
   selectorPopupView,
   selectorPopupAvatar,
+  selectorPopupConfirm,
   selectorCardTemplate,
   selectorPopupPlace,
   selectorCardSection

@@ -45,7 +45,7 @@ export default class PopupWithForm extends Popup {
       const initialText = this._buttonElement.textContent;
       this._buttonElement.textContent = 'Сохранение...';
       this._handleFormSubmit(this._getInputValues())
-        .then(() => this.close())
+        .then(this.close())
         .catch(err => console.log(`Ошибка: ${err}`))
         .finally(() => {
           this._buttonElement.textContent = initialText;
